@@ -1,0 +1,6 @@
+[
+  {
+    "Action": ["events:PutEvents"],
+    "Resource": ["arn:aws:events:*:226594215814:event-bus/*"]
+  }
+]

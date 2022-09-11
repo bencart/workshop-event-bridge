@@ -1,0 +1,27 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-eventbridgeapp-dev-190811-authRole",
+      "UnauthRoleArn": "arn:aws:iam::226594215814:role/amplify-eventbridgeapp-dev-190811-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::226594215814:role/amplify-eventbridgeapp-dev-190811-authRole",
+      "Region": "ap-southeast-2",
+      "DeploymentBucketName": "amplify-eventbridgeapp-dev-190811-deployment",
+      "UnauthRoleName": "amplify-eventbridgeapp-dev-190811-unauthRole",
+      "StackName": "amplify-eventbridgeapp-dev-190811",
+      "StackId": "arn:aws:cloudformation:ap-southeast-2:226594215814:stack/amplify-eventbridgeapp-dev-190811/dc715170-30f8-11ed-ac1e-0291506a71a0",
+      "AmplifyAppId": "dm371mek2daur"
+    },
+    "categories": {
+      "function": {
+        "eventbridgeapp2482d011": {
+          "deploymentBucketName": "amplify-eventbridgeapp-dev-190811-deployment",
+          "s3Key": "amplify-builds/eventbridgeapp2482d011-6e366d41563935496d43-build.zip"
+        },
+        "eventbridgeapp8950a6b9": {
+          "deploymentBucketName": "amplify-eventbridgeapp-dev-190811-deployment",
+          "s3Key": "amplify-builds/eventbridgeapp8950a6b9-69496e6958322f484f58-build.zip"
+        }
+      }
+    }
+  }
+}
