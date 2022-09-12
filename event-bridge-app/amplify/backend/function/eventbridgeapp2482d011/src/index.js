@@ -16,7 +16,7 @@ Amplify Params - DO NOT EDIT */
  const createMessage = require('./graphql/mutations').createMessage
 
 exports.handler = async (event) => {
-    const appsyncUrl = process.env.API_ORDERPROJECT_GRAPHQLAPIENDPOINTOUTPUT
+    const appsyncUrl = process.env.API_EVENTBRIDGEAPP_GRAPHQLAPIENDPOINTOUTPUT
     const region = process.env.REGION
     const apiKey = process.env.API_EVENTBRIDGEAPP_GRAPHQLAPIKEYOUTPUT
 
@@ -52,12 +52,12 @@ exports.handler = async (event) => {
     //make the call to update an order, sending the updated order back to the client
     try {
         const createdMessage = await createNewMessage({
-            evnt : "123458",
-            name : "BenC",
-            emoji : "🦸🏻‍♂️",
-            food : "Hamburger",
-            colour : "Blue",
-            animal : "Dog"
+            evnt : event.detail.evnt,
+            name : event.detail.person,
+            emoji : event.detail.emoji,
+            food : event.detail.food,
+            colour : event.detail.colour,
+            animal : event.detail.animal
           })
 
         return {

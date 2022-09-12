@@ -15,11 +15,11 @@
       "function": {
         "eventbridgeapp2482d011": {
           "deploymentBucketName": "amplify-eventbridgeapp-dev-190811-deployment",
-          "s3Key": "amplify-builds/eventbridgeapp2482d011-6e366d41563935496d43-build.zip"
+          "s3Key": "amplify-builds/eventbridgeapp2482d011-324b745763642b39712f-build.zip"
         },
         "eventbridgeapp8950a6b9": {
           "deploymentBucketName": "amplify-eventbridgeapp-dev-190811-deployment",
-          "s3Key": "amplify-builds/eventbridgeapp8950a6b9-69496e6958322f484f58-build.zip"
+          "s3Key": "amplify-builds/eventbridgeapp8950a6b9-644f594572612f772b67-build.zip"
         }
       }
     }

@@ -4,6 +4,7 @@ import { AmplifyDependentResourcesAttributes } from '../../types/amplify-depende
 import * as events from '@aws-cdk/aws-events'
 import * as targets from '@aws-cdk/aws-events-targets'
 import * as lambda from '@aws-cdk/aws-lambda'
+import * as iam from '@aws-cdk/aws-iam'
 
 export class cdkStack extends cdk.Stack {
     constructor(
@@ -44,5 +45,16 @@ export class cdkStack extends cdk.Stack {
         // add this rule to the default event bus
         rule.addTarget(new targets.LambdaFunction(eventbridgeapp2482d011));
 
+        let action = "lambda:InvokeFunction"
+        let principal = "events.amazonaws.com"
+        let sourceArn = rule.ruleArn
+        let functionName = eventbridgeapp2482d011.functionArn
+
+        let permission = new lambda.CfnPermission(this, 'invoke-from-eb', {
+          action,
+          functionName,
+          principal,
+          sourceArn
+        });
     }
 }

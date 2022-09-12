@@ -1,7 +1,6 @@
 /* src/App.js */
 import React, { useEffect, useState } from 'react'
 import { Amplify, API, graphqlOperation } from 'aws-amplify'
-import { createMessage } from './graphql/mutations'
 import { listMessages } from './graphql/queries'
 import { onCreateMessage } from './graphql/subscriptions'
 
@@ -10,15 +9,39 @@ Amplify.configure(awsExports);
 
 const flattenEvents = function(newEvent, currentEvents) {
   var events = {...currentEvents}
-  if (newEvent.evnt in events) {
-    events[newEvent.evnt].people.push({name: newEvent.name, emoji: newEvent.emoji})
-  } else {
-    let e = {...newEvent}
-    e.people = []
-    e.people.push({name: newEvent.name, emoji: newEvent.emoji})
-    events[newEvent.evnt] = e
+  upsertEvent(newEvent, events)
+  return orderEvents(events)
+}
+
+const refreshEvents = function(newEvents) {
+  console.log(newEvents)
+  var events = {}
+  for (var newEvent of newEvents) {
+    upsertEvent(newEvent, events)
   }
-  return events
+  return orderEvents(events)
+}
+
+const orderEvents = function(events) {
+  var result = {}
+  var keys = Object.keys(events)
+  keys.sort()
+  keys.reverse()
+  for (var key of keys) {
+    result[key] = events[key]
+  }
+  return result
+}
+
+const upsertEvent = function(evnt, evnts) {
+  if (evnt.evnt in evnts) {
+    evnts[evnt.evnt].people.push({name: evnt.name, emoji: evnt.emoji, key: evnt.id})
+  } else {
+    let e = {...evnt}
+    e.people = []
+    e.people.push({name: evnt.name, emoji: evnt.emoji, key: evnt.id})
+    evnts[evnt.evnt] = e
+  }
 }
 
 const App = () => {
@@ -30,8 +53,8 @@ const App = () => {
     }).subscribe({
         next: ({ provider, value }) => {
             setMessages(flattenEvents(value.data.onCreateMessage, {...messages}))
-            }
-          })
+        }
+    })
 
     return () => {
         subscription.unsubscribe()
@@ -40,33 +63,17 @@ const App = () => {
   async function fetchMessages() {
     try {
       const messageData = await API.graphql(graphqlOperation(listMessages))
-      const newMessages = flattenEvents(messageData.data.listMessages.items, messages)
+      const newMessages = refreshEvents(messageData.data.listMessages.items)
+      console.log(newMessages)
       setMessages(newMessages)
     } catch (err) { console.log('error fetching messages') }
-  }
-
-  async function addMessage() {
-    try {
-      const message = {
-        evnt : "123458",
-        name : "BenC",
-        emoji : "🦸🏻‍♂️",
-        food : "Hamburger",
-        colour : "Blue",
-        animal : "Dog"
-      }
-      await API.graphql(graphqlOperation(createMessage, {input: message}))
-    } catch (err) {
-      console.log('error creating message:', err)
-    }
   }
 
   return (
     <div style={styles.container}>
       <h2>Event Bridge Messages</h2>
-      <button style={styles.button} onClick={addMessage}>Create Message</button>
+      <button style={styles.button} onClick={fetchMessages}>Refresh Messages</button>
       {
-        
         Object.values(messages).map((message, index) => (
           <div key={message.id ? message.id : index} style={styles.message}>
             <p style={styles.messageEvent}>{message.evnt}</p>
@@ -74,7 +81,7 @@ const App = () => {
             <p style={styles.messageDescription}>{message.colour}</p>
             <p style={styles.messageDescription}>{message.animal}</p><br></br>
             {message.people.map((person, ind) => (
-              <span title={person.name}>{person.emoji}</span>
+              <span key={person.key} title={person.name}>{person.emoji}</span>
             ))}
             <hr></hr>
           </div>
